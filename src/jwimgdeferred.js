@@ -1,6 +1,18 @@
 var jw = jw || {};
 
-jw.jwimgdeferred = (function() {
+jw.ImgDeferred = (function() {
+
+	// class DeferredImages: 
+	// class CachedDeferredImages: 
+
+	var imgs = document.querySelectorAll('img');
+	// When we've undeferred the image we don't need to reprocess
+	// Coerce into an array for removing nodes
+	deferredImages = [];
+	for (var n = 0; n < imgs.length; n++) { 
+		deferredImages[n] = imgs[n];
+	}
+
 
 	// Options 
 
@@ -44,19 +56,14 @@ jw.jwimgdeferred = (function() {
 		}
 	}
 
-	// class DeferredImages: 
-	// class CachedDeferredImages: 
-
-	var imgs = document.querySelectorAll('img');
-	// When we've undeferred the image we don't need to reprocess
-	var deferredImages = imgs;
-
-	function undeferImg(img) { 
+	function undeferImg(imgs, i) { 
+		var img = imgs[i];
 		var deferredAvatarSrc = img.getAttribute('src');
 		// TODO: Check against future implementations
 		var imgSrc = deferredAvatarSrc.split('?')[0]; 
-		console.log('Undeferring ' + deferredAvatarSrc);
+		log('Undeferring ' + deferredAvatarSrc);
 		img.setAttribute('src', imgSrc);
+		return true;
 	}
 
 
@@ -64,16 +71,30 @@ jw.jwimgdeferred = (function() {
 		var viewBottomThreshold = window.pageYOffset + window.innerHeight + config.threshold.top;
 		var imgOffsetTop = findPos(img).top;
 		if (imgOffsetTop <= viewBottomThreshold) {
-			console.log(imgOffsetTop + '<' + viewBottomThreshold);
+			log(imgOffsetTop + '<' + viewBottomThreshold);
 			return true;
 		}
 	}
 
+	// TODO:  Optimization review 
 	function checkDeferredImgs() {
-		for (var i = 0; i < deferredImages.length; i++) { 
-			if(imgInView(deferredImages[i])) { 
-				undeferImg(deferredImages[i]);
+
+		if(deferredImages.length > 0) { 
+			var _deferredImages = [];
+			// Set up the cache
+
+			for (var i = 0; i < deferredImages.length; i++) { 
+				if(imgInView(deferredImages[i])) { 
+					if (undeferImg(deferredImages, i)) { 
+						log('removed' + i);
+					} 
+				} else { 
+					_deferredImages.push(deferredImages[i]);
+				}
 			}
+
+			log('Setting deferred images to new length ' + _deferredImages.length);
+			deferredImages = _deferredImages;
 		}
 	}
 
@@ -82,8 +103,8 @@ jw.jwimgdeferred = (function() {
 	bind('DOMContentLoaded', log);
 
 	function init() { 
-		console.log('initializing');
-		console.info('window dimensions: ' + window.innerWidth + ',' + window.innerHeight);
+		log('initializing');
+
 		checkDeferredImgs(); 
 	}
 
