@@ -61,7 +61,7 @@ jw.ImgDeferred = (function() {
 		var deferredAvatarSrc = img.getAttribute('src');
 		// TODO: Check against future implementations
 		var imgSrc = deferredAvatarSrc.split('?')[0]; 
-		log('Undeferring ' + deferredAvatarSrc);
+		//		log('Undeferring ' + deferredAvatarSrc);
 		img.setAttribute('src', imgSrc);
 		return true;
 	}
@@ -71,7 +71,7 @@ jw.ImgDeferred = (function() {
 		var viewBottomThreshold = window.pageYOffset + window.innerHeight + config.threshold.top;
 		var imgOffsetTop = findPos(img).top;
 		if (imgOffsetTop <= viewBottomThreshold) {
-			log(imgOffsetTop + '<' + viewBottomThreshold);
+			//			log(imgOffsetTop + '<' + viewBottomThreshold);
 			return true;
 		}
 	}
@@ -86,25 +86,20 @@ jw.ImgDeferred = (function() {
 			for (var i = 0; i < deferredImages.length; i++) { 
 				if(imgInView(deferredImages[i])) { 
 					if (undeferImg(deferredImages, i)) { 
-						log('removed' + i);
+						// log('removed' + i);
 					} 
 				} else { 
 					_deferredImages.push(deferredImages[i]);
 				}
 			}
 
-			log('Setting deferred images to new length ' + _deferredImages.length);
+			// log('Setting deferred images to new length ' + _deferredImages.length);
 			deferredImages = _deferredImages;
 		}
 	}
 
-	// TODO: attachEvent
-	bind('load', log);
-	bind('DOMContentLoaded', log);
-
 	function init() { 
-		log('initializing');
-
+		//		log('initializing');
 		checkDeferredImgs(); 
 	}
 
