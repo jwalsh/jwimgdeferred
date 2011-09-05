@@ -6,12 +6,32 @@ jw.jwimgdeferred = (function() {
 
 	var config = {
 		threshold: { // When are we close enough to pull
-			x: 0, // We have to have the image in the viewport
-			y: 0 
+			top: 0, // We have to have the image in the viewport
+			left: 0 
 		}
 	};
 
-	// Dimensions utility 
+	// Utilities
+
+	// Event factory 
+	function bind(e, l) { 
+		if (window.addEventListener) { 
+			window.addEventListener(e, l);
+		} else if (window.attachEvent) { 
+			window.attachEvent(e, l);
+		} else {
+			new Error('No event binder found.');
+		}
+	}
+
+	// Logger
+	function log(e) { 
+		if (console && typeof console.log === 'function') {
+			console.log(e);
+		}
+	}
+
+	// Dimensions
 	// Externally sourced from http://www.quirksmode.org/js/findpos.html
 	function findPos(obj) {
 		var _left = _top = 0;
@@ -41,7 +61,7 @@ jw.jwimgdeferred = (function() {
 
 
 	function imgInView(img) { 
-		var viewBottomThreshold = window.pageYOffset + window.innerHeight + config.threshold.y;
+		var viewBottomThreshold = window.pageYOffset + window.innerHeight + config.threshold.top;
 		var imgOffsetTop = findPos(img).top;
 		if (imgOffsetTop <= viewBottomThreshold) {
 			console.log(imgOffsetTop + '<' + viewBottomThreshold);
@@ -57,19 +77,9 @@ jw.jwimgdeferred = (function() {
 		}
 	}
 
-	function logEvent(e) { 
-		if (e.type === 'scroll') { 
-
-		} else { 
-			console.log(e);
-		}
-
-	}
-
 	// TODO: attachEvent
-	window.addEventListener('scroll', logEvent);
-	window.addEventListener('load', logEvent);
-	window.addEventListener('DOMContentLoaded', logEvent);
+	bind('load', log);
+	bind('DOMContentLoaded', log);
 
 	function init() { 
 		console.log('initializing');
@@ -77,6 +87,7 @@ jw.jwimgdeferred = (function() {
 		checkDeferredImgs(); 
 	}
 
-	window.addEventListener('load', init);
+	bind('load', init);
+	bind('scroll', checkDeferredImgs);
 
 }());
