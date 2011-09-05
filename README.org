@@ -32,7 +32,26 @@ Connecting to mediacdn.disqus.com|96.17.108.160|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 5455 (5.3K) [image/png]
 
-** Use local images 
+** Validate the use of data attributes rather than redirectors 
+
+http://www.webpagetest.org/result/110905_B4_1GP0X/
+
+
+First View
+(0.507s)		
+Repeat View
+(0.492s)
+
+This contrasts with the direct src input with 
+
+http://www.webpagetest.org/result/110905_DQ_1GNV0/
+
+First View
+(1.361s)		
+Repeat View
+(1.233s)
+
+** DONE Use local images 
 
 wal.sh%2Fpoc%2Fjwimgdeferred%2Fstatic%2Fimages%2Favatar.png
 
@@ -49,3 +68,11 @@ mediacdn.disqus.com%2F1312506743%2Fimages%2Fnoavatar92.png
 http://www.quirksmode.org/dom/events/scroll.html
 
 Compatibility requires attaching at window.
+
+
+** Just perform a vertical scroll implementation 
+
+scrollY: 103
+pageYOffset: 103
+
+When a user scrolls the page a naive implementation will just recheck all of the images we're monitoring, see if they're now in view, and load.
