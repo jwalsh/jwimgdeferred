@@ -9,7 +9,7 @@ This supports modern browsers with no external dependencies.
 
 * Notes 
 
-** Baseline performance of setup of the deferred image approach 
+** DONE Baseline performance of setup of the deferred image approach 
 
 Using a parameter-driven approach creates a redirection chain.
 
@@ -32,7 +32,7 @@ Connecting to mediacdn.disqus.com|96.17.108.160|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 5455 (5.3K) [image/png]
 
-** Validate the use of data attributes rather than redirectors 
+** DONE Validate the use of data attributes rather than redirectors 
 
 http://www.webpagetest.org/result/110905_B4_1GP0X/
 
@@ -57,22 +57,28 @@ wal.sh%2Fpoc%2Fjwimgdeferred%2Fstatic%2Fimages%2Favatar.png
 
 mediacdn.disqus.com%2F1312506743%2Fimages%2Fnoavatar92.png
 
-** Confirm base selector for images with class support
+** DONE Confirm base selector for images with class support
 
-** Use no namespace or privacy, use hoisting w/o var at top
+** DONE Use no namespace or privacy, use hoisting w/o var at top
 
-** Apply the deferring at the image level rather than delegating 
+** DONE [#B] Apply the deferring at the image level rather than delegating 
 
-** Add scroll logging 
+** DONE Add scroll logging 
 
 http://www.quirksmode.org/dom/events/scroll.html
 
 Compatibility requires attaching at window.
 
 
-** Just perform a vertical scroll implementation 
+** DONE Just perform a vertical scroll implementation 
 
 scrollY: 103
 pageYOffset: 103
 
 When a user scrolls the page a naive implementation will just recheck all of the images we're monitoring, see if they're now in view, and load.
+
+** DONE Add cache support 
+
+** Rerun performance test 
+
+** Compatibility check
