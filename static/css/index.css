@@ -1,0 +1,8 @@
+.jwimgdeferred {
+		border: 1px solid red; 
+}
+
+.jwimgloaded { 
+		border: 1px solid green; 
+}
+
