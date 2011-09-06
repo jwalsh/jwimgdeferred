@@ -7,7 +7,7 @@ jw.ImgDeferred = (function() {
 	// class DeferredImages: 
 	// class CachedDeferredImages: 
 
-	var imgs = document.querySelectorAll('img');
+	var imgs = document.getElementsByTagName('img');
 	// When we've undeferred the image we don't need to reprocess
 	// Coerce into an array for removing nodes
 	// We lose live updates to the NodeList but this is more performant
