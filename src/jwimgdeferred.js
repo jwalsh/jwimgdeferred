@@ -30,7 +30,7 @@ jw.ImgDeferred = (function() {
 	// Utilities
 
 	// Logger
-	function log(e) { 
+	var debug = log = function(e) { 
 		if (console && typeof console.log === 'function') {
 			console.log(e);
 		}
@@ -50,7 +50,7 @@ jw.ImgDeferred = (function() {
 
 	function unbind(e, l) { 
 		// TODO: Cache the call rather than checking each time
-		log('unbind ' + e);
+		debug('unbind ' + e);
 		if (document.removeEventListener) { 
 			document.removeEventListener(e, l);
 		} else if (document.detachEvent) { 
@@ -84,10 +84,13 @@ jw.ImgDeferred = (function() {
 
 	function imgInView(img) { 
 		var viewBottomThreshold = window.pageYOffset + window.innerHeight + config.threshold.top;
-		var imgOffsetTop = findPos(img).top;
-		if (imgOffsetTop <= viewBottomThreshold) {
-			//			log(imgOffsetTop + '<' + viewBottomThreshold);
-			return true;
+		var pos = findPos(img);
+		if (pos) { 
+			var imgOffsetTop = pos.top;
+			if (imgOffsetTop <= viewBottomThreshold) {
+				log(imgOffsetTop + '<' + viewBottomThreshold);
+				return true;
+			}
 		}
 	}
 
@@ -108,10 +111,13 @@ jw.ImgDeferred = (function() {
 				}
 			}
 
-			// log('Setting deferred images to new length ' + _deferredImages.length);
-			deferredImages = _deferredImages;
+			// Only indicate when we're actually doing something interesting with the list of images 
+			if (deferredImages.length !== _deferredImages.length) { 
+				debug('Setting deferred images to new length ' + _deferredImages.length);
+				deferredImages = _deferredImages;
+			}
 		} else { 
-			// We don't need to keep listening 
+			// We don't need to keep listening since we've undeferred all images
 			// log('scroll unbound for checkDeferredImgs');
 			unbind('scroll', checkDeferredImgs);
 		}
