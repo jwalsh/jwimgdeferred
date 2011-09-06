@@ -2,14 +2,18 @@ var jw = jw || {};
 
 jw.ImgDeferred = (function() {
 
+	// var imgs, config, n, i;
+
 	// class DeferredImages: 
 	// class CachedDeferredImages: 
 
 	var imgs = document.querySelectorAll('img');
 	// When we've undeferred the image we don't need to reprocess
 	// Coerce into an array for removing nodes
+	// We lose live updates to the NodeList but this is more performant
 	deferredImages = [];
 	for (var n = 0; n < imgs.length; n++) { 
+		// ...push() faster?
 		deferredImages[n] = imgs[n];
 	}
 
@@ -18,15 +22,23 @@ jw.ImgDeferred = (function() {
 
 	var config = {
 		threshold: { // When are we close enough to pull
-			top: 0, // We have to have the image in the viewport
+			top: 80, // We have to have the image in the viewport
 			left: 0 
 		}
 	};
 
 	// Utilities
 
+	// Logger
+	function log(e) { 
+		if (console && typeof console.log === 'function') {
+			console.log(e);
+		}
+	}
+
 	// Event factory 
 	function bind(e, l) { 
+		log('bind ' + e);
 		if (window.addEventListener) { 
 			window.addEventListener(e, l);
 		} else if (window.attachEvent) { 
@@ -36,10 +48,15 @@ jw.ImgDeferred = (function() {
 		}
 	}
 
-	// Logger
-	function log(e) { 
-		if (console && typeof console.log === 'function') {
-			console.log(e);
+	function unbind(e, l) { 
+		// TODO: Cache the call rather than checking each time
+		log('unbind ' + e);
+		if (document.removeEventListener) { 
+			document.removeEventListener(e, l);
+		} else if (document.detachEvent) { 
+			document.detachEvent(e, l);
+		} else { 
+			new Error('No event removal found.');
 		}
 	}
 
@@ -58,9 +75,7 @@ jw.ImgDeferred = (function() {
 
 	function undeferImg(imgs, i) { 
 		var img = imgs[i];
-		var deferredAvatarSrc = img.getAttribute('src');
-		// TODO: Check against future implementations
-		var imgSrc = deferredAvatarSrc.split('?')[0]; 
+		var imgSrc = img.getAttribute('data-deferred-src');
 		//		log('Undeferring ' + deferredAvatarSrc);
 		img.setAttribute('src', imgSrc);
 		return true;
@@ -79,7 +94,7 @@ jw.ImgDeferred = (function() {
 	// TODO:  Optimization review 
 	function checkDeferredImgs() {
 
-		if(deferredImages.length > 0) { 
+		if (deferredImages.length > 0) { 
 			var _deferredImages = [];
 			// Set up the cache
 
@@ -95,6 +110,10 @@ jw.ImgDeferred = (function() {
 
 			// log('Setting deferred images to new length ' + _deferredImages.length);
 			deferredImages = _deferredImages;
+		} else { 
+			// We don't need to keep listening 
+			// log('scroll unbound for checkDeferredImgs');
+			unbind('scroll', checkDeferredImgs);
 		}
 	}
 
