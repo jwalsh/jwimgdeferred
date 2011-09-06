@@ -48,13 +48,13 @@ jw.ImgDeferred = (function() {
 		}
 	}
 
-	function unbind(e, l) { 
+	function unbind(o, e, l) { 
 		// TODO: Cache the call rather than checking each time
-		debug('unbind ' + e);
-		if (document.removeEventListener) { 
-			document.removeEventListener(e, l);
-		} else if (document.detachEvent) { 
-			document.detachEvent(e, l);
+		debug('unbind ' + o);
+		if (o.removeEventListener) { 
+			o.removeEventListener(l);
+		} else if (e.detachEvent) { 
+			e.detachEvent(e, l);
 		} else { 
 			new Error('No event removal found.');
 		}
@@ -88,7 +88,7 @@ jw.ImgDeferred = (function() {
 		if (pos) { 
 			var imgOffsetTop = pos.top;
 			if (imgOffsetTop <= viewBottomThreshold) {
-				log(imgOffsetTop + '<' + viewBottomThreshold);
+				// log(imgOffsetTop + '<' + viewBottomThreshold);
 				return true;
 			}
 		}
@@ -113,13 +113,14 @@ jw.ImgDeferred = (function() {
 
 			// Only indicate when we're actually doing something interesting with the list of images 
 			if (deferredImages.length !== _deferredImages.length) { 
-				debug('Setting deferred images to new length ' + _deferredImages.length);
+				// debug('Setting deferred images to new length ' + _deferredImages.length);
 				deferredImages = _deferredImages;
 			}
 		} else { 
 			// We don't need to keep listening since we've undeferred all images
 			// log('scroll unbound for checkDeferredImgs');
-			unbind('scroll', checkDeferredImgs);
+			log('Deferred images queue cleared; removing event listener for window scroll checkDeferredImgs');
+			window.removeEventListener('scroll', checkDeferredImgs);
 		}
 	}
 
