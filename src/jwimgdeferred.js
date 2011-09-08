@@ -31,7 +31,7 @@ jw.ImgDeferred = (function() {
 
 	// Logger
 	var debug = log = function(e) { 
-		if (typeof console !== 'undefined' && typeof console.log === 'function') {
+		if (typeof console !== 'undefined') {
 			console.log(e);
 		}
 	}
