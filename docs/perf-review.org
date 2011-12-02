@@ -1,3 +1,7 @@
 * Performance Review 
 
 ** Create runner to ensure image widths are provided 
+
+** Run external monitor for the waterfall charts 
+
+http://www.delicious.com/search?p=performance&chk=&context=main|&fr=del_icio_us&lc=
