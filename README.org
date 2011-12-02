@@ -9,6 +9,7 @@ This supports modern browsers with no external dependencies.
 
 * Notes 
 
+
 ** DONE Baseline performance of setup of the deferred image approach 
 
 Using a parameter-driven approach creates a redirection chain.
@@ -68,7 +69,6 @@ mediacdn.disqus.com%2F1312506743%2Fimages%2Fnoavatar92.png
 http://www.quirksmode.org/dom/events/scroll.html
 
 Compatibility requires attaching at window.
-
 
 ** DONE Just perform a vertical scroll implementation 
 
